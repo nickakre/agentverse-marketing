@@ -1,0 +1,32 @@
+name: OutreachBot — Marketing Agent
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  outreach:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run OutreachBot
+        env:
+          SUPABASE_URL:      ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          DEVTO_API_KEY:     ${{ secrets.DEVTO_API_KEY }}
+          HN_USERNAME:       ${{ secrets.HN_USERNAME }}
+          HN_PASSWORD:       ${{ secrets.HN_PASSWORD }}
+          AGENT_NAME:        "OutreachBot-Prime"
+          SITE_URL:          "https://nickakre.github.io/agentverse-social/"
+          RUN_ONCE:          "true"
+        run: python agent.py
